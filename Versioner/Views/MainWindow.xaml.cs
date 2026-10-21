@@ -235,9 +235,36 @@ public partial class MainWindow : Window
         paletteHelper.SetTheme(theme);
     }
 
+    // 更改托盘图标的函数
     private void UpdateIcon()
     {
-        var iconUri = new Uri("pack://application:,,,/Resources/app.ico", UriKind.RelativeOrAbsolute);
-        Icon = BitmapFrame.Create(iconUri);
+        var isDark = UseDarkSystemTheme();
+        if (isDark)
+        {
+            var iconUri = new Uri("pack://application:,,,/Resources/Dark/app.ico", UriKind.RelativeOrAbsolute);
+            Icon = BitmapFrame.Create(iconUri);
+        }
+        else
+        {
+            var iconUri = new Uri("pack://application:,,,/Resources/Light/app.ico", UriKind.RelativeOrAbsolute);
+            Icon = BitmapFrame.Create(iconUri);
+        }
+    }
+
+    private static bool UseDarkSystemTheme()
+    {
+        // 在注册表中，Windows保存它的个人设置信息
+        // 目前Windows将AppsUseLightTheme键值用于表示深色或浅色主题
+        // 该键值位于路径HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize下
+        const string registryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
+        const string registryValueName = "AppsUseLightTheme";
+
+        using var key = Registry.CurrentUser.OpenSubKey(registryKeyPath);
+        var registryValueObject = key?.GetValue(registryValueName)!;
+
+        var registryValue = (int?)registryValueObject;
+
+        // AppsUseLightTheme 0表示深色，1表示浅色
+        return registryValue == 0;
     }
 }

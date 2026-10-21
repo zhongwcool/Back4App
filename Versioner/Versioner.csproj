@@ -6,8 +6,9 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
+        <Version>1.0.0.0</Version>
         <ApplicationManifest>app.manifest</ApplicationManifest>
-        <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+        <ApplicationIcon>Resources\Light\app.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,15 +36,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Page Update="Views\MainWindow.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <XamlRuntime>Wpf</XamlRuntime>
-            <SubType>Designer</SubType>
-        </Page>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Resource Include="Resources\app.ico" />
+      <None Remove="Resources\Light\app.ico" />
+      <Resource Include="Resources\Light\app.ico" />
+      <None Remove="Resources\Dark\app.ico" />
+      <Resource Include="Resources\Dark\app.ico" />
     </ItemGroup>
 
 </Project>
