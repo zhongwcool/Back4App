@@ -22,6 +22,7 @@ public partial class MainWindow : Window
         _viewModel = viewModel;
         InitializeComponent();
         DpiTextRenderingHelper.Attach(this);
+        WindowCaptionTheme.Attach(this);
         DataContext = viewModel;
         viewModel.RequiredFieldsMissing += OnRequiredFieldsMissing;
         viewModel.PropertyChanged += OnViewModelPropertyChanged;
@@ -243,6 +244,7 @@ public partial class MainWindow : Window
         }
 
         paletteHelper.SetTheme(theme);
+        WindowCaptionTheme.ApplyToOpenWindows();
     }
 
     // 更改托盘图标的函数

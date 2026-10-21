@@ -28,6 +28,7 @@ public partial class CredentialWindow : Window
     {
         InitializeComponent();
         DpiTextRenderingHelper.Attach(this);
+        WindowCaptionTheme.Attach(this);
         Result = new Back4AppOptions
         {
             ApplicationId = current.ApplicationId,

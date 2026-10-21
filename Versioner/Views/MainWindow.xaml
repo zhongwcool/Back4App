@@ -363,7 +363,7 @@
 
                     <DockPanel Margin="0,0,0,16">
                         <Button DockPanel.Dock="Right"
-                                Content="密钥"
+                                Content="B4A凭证"
                                 Click="Credentials_OnClick"
                                 Style="{StaticResource MaterialDesignFlatButton}"
                                 ToolTip="配置 Application Id 和 Master Key"
