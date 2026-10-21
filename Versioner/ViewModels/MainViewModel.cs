@@ -43,6 +43,9 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private string _loadingTitle = "";
 
+    [ObservableProperty]
+    private string _loadingDetail = "";
+
     public ObservableCollection<string> LoadingSteps { get; } = [];
 
     [ObservableProperty]
@@ -242,6 +245,7 @@ public partial class MainViewModel : ViewModelBase
         try
         {
             LoadingTitle = loadingTitle;
+            LoadingDetail = "";
             LoadingSteps.Clear();
             IsBusy = true;
             await action();
@@ -271,6 +275,7 @@ public partial class MainViewModel : ViewModelBase
             return;
         }
 
+        LoadingDetail = step;
         LoadingSteps.Add(step);
         StatusText = step;
     }

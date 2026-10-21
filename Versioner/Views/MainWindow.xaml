@@ -423,62 +423,120 @@
     </m3:DrawerHost>
 
         <Grid x:Name="LoadingOverlay"
-              Panel.ZIndex="20"
-              ClipToBounds="True">
+              Panel.ZIndex="20">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Collapsed" />
+                    <Setter Property="Opacity" Value="0" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsBusy}" Value="True">
                             <Setter Property="Visibility" Value="Visible" />
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                         From="0"
+                                                         To="1"
+                                                         Duration="0:0:0.18" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
             <Border Background="{DynamicResource MaterialDesignPaper}" />
-            <Grid Width="278"
-                  Height="236"
-                  Margin="0,36,0,0"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Top"
-                  ClipToBounds="True"
-                  IsHitTestVisible="False">
-                <lottie:LottieAnimationView x:Name="LoadingLottie"
-                                            Width="278"
-                                            Height="236"
-                                            AutoPlay="True"
-                                            RepeatCount="-1"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch" />
-            </Grid>
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Margin="24"
-                        MaxWidth="520"
+                        Margin="32,0,32,48"
                         IsHitTestVisible="False">
+                <Grid Width="200"
+                      Height="200"
+                      HorizontalAlignment="Center">
+                    <Ellipse Width="116"
+                             Height="116"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Fill="{DynamicResource MaterialDesign.Brush.Primary}"
+                             Opacity="0.12" />
+                    <lottie:LottieAnimationView x:Name="LoadingLottie"
+                                                Width="200"
+                                                Height="200"
+                                                AutoPlay="True"
+                                                RepeatCount="-1"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" />
+                </Grid>
                 <TextBlock Text="{Binding LoadingTitle}"
+                           Margin="0,-32,0,0"
                            FontSize="16"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
                            HorizontalAlignment="Center"
                            TextAlignment="Center" />
-                <ItemsControl ItemsSource="{Binding LoadingSteps}"
-                              Margin="0,12,0,0"
-                              HorizontalAlignment="Center"
-                              Foreground="{DynamicResource MaterialDesign.Brush.Foreground}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}"
-                                       FontSize="13"
-                                       Opacity="0.75"
-                                       Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
-                                       TextAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,3" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <TextBlock Text="{Binding LoadingDetail}"
+                           MaxWidth="420"
+                           Margin="0,8,0,0"
+                           FontSize="13"
+                           Opacity="0.58"
+                           Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding LoadingDetail}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <Grid Width="128"
+                      Height="4"
+                      Margin="0,20,0,0"
+                      HorizontalAlignment="Center">
+                    <Border CornerRadius="2"
+                            Background="{DynamicResource MaterialDesign.Brush.Primary}"
+                            Opacity="0.16" />
+                    <Border CornerRadius="2"
+                            ClipToBounds="True">
+                        <Border Width="40"
+                                Height="4"
+                                HorizontalAlignment="Left"
+                                CornerRadius="2"
+                                Background="{DynamicResource MaterialDesign.Brush.Primary}"
+                                RenderTransformOrigin="0,0.5">
+                            <Border.RenderTransform>
+                                <TranslateTransform X="-40" />
+                            </Border.RenderTransform>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard Name="LoadingBarStory">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                                         From="-40"
+                                                                         To="128"
+                                                                         Duration="0:0:1.15"
+                                                                         RepeatBehavior="Forever" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <StopStoryboard BeginStoryboardName="LoadingBarStory" />
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </Border>
+                </Grid>
             </StackPanel>
         </Grid>
     </Grid>
