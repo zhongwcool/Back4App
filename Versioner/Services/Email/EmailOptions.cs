@@ -1,7 +1,7 @@
 namespace Versioner.Services.Email;
 
 /// <summary>
-/// 邮件(SMTP)相关配置，绑定自 appsettings.json 的 "Email" 节点。
+/// 邮件（SMTP）配置。界面未使用，保持默认空值。
 /// </summary>
 public sealed class EmailOptions
 {

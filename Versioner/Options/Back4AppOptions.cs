@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Versioner.Options;
 
 public sealed class Back4AppOptions
@@ -10,6 +12,7 @@ public sealed class Back4AppOptions
 
     public string ServerUrl { get; set; } = "https://parseapi.back4app.com";
 
+    [JsonIgnore]
     public bool IsConfigured =>
         !string.IsNullOrWhiteSpace(ApplicationId)
         && !string.IsNullOrWhiteSpace(MasterKey)

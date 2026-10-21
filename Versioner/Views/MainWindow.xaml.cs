@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -80,7 +79,31 @@ public partial class MainWindow : Window
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         Loaded -= OnLoaded;
-        EnsureLoadingLottie();
+        if (_viewModel.RefreshCommand.CanExecute(null))
+            await _viewModel.RefreshCommand.ExecuteAsync(null);
+    }
+
+    private async void Credentials_OnClick(object sender, RoutedEventArgs e)
+    {
+        var dialog = new CredentialWindow(_viewModel.CredentialDraft())
+        {
+            Owner = this,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            ShowInTaskbar = false
+        };
+        if (dialog.ShowDialog() != true)
+            return;
+
+        try
+        {
+            _viewModel.SaveCredentials(dialog.Result);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, ex.Message, "保存密钥失败", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
         if (_viewModel.RefreshCommand.CanExecute(null))
             await _viewModel.RefreshCommand.ExecuteAsync(null);
     }
@@ -96,19 +119,7 @@ public partial class MainWindow : Window
         if (!_viewModel.IsBusy)
             return;
 
-        EnsureLoadingLottie();
-        if (!string.IsNullOrEmpty(LoadingLottie.FileName))
-            LoadingLottie.PlayAnimation();
-    }
-
-    private void EnsureLoadingLottie()
-    {
-        if (!string.IsNullOrEmpty(LoadingLottie.FileName))
-            return;
-
-        var path = Path.Combine(AppContext.BaseDirectory, "Assets", "fish.json");
-        if (File.Exists(path))
-            LoadingLottie.FileName = path;
+        LoadingLottie.PlayAnimation();
     }
 
     private void SyncLoadingAnimation()
@@ -120,8 +131,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        if (!string.IsNullOrEmpty(LoadingLottie.FileName))
-            LoadingLottie.StopAnimation();
+        LoadingLottie.StopAnimation();
     }
 
     private bool _allowClose;

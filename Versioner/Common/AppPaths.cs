@@ -12,6 +12,7 @@ public static class AppPaths
 
     public static string LogsDirectory { get; } = Path.Combine(AppDataRoot, "logs");
     public static string LogFilePath { get; } = Path.Combine(LogsDirectory, "log-.txt");
+    public static string SettingsPath { get; } = Path.Combine(AppDataRoot, "settings.json");
 
     public static void EnsureCreated()
     {

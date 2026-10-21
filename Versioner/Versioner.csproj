@@ -9,6 +9,11 @@
         <Version>1.0.0.0</Version>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Resources\Light\app.ico</ApplicationIcon>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>false</SelfContained>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <DebugType>embedded</DebugType>
+        <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,21 +23,13 @@
       <PackageReference Include="MaterialDesignThemes" Version="5.4.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
       <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
-      <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.1" />
       <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
       <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Assets\fish.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="appsettings.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="appsettings.local.json" Condition="Exists('appsettings.local.json')">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+        <None Remove="Assets\fish.json" />
+        <Resource Include="Assets\fish.json" />
     </ItemGroup>
 
     <ItemGroup>

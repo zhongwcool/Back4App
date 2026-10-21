@@ -4,15 +4,19 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Versioner.Helpers;
 using Versioner.Models;
+using Versioner.Options;
 using Versioner.Services.Parse;
+using Versioner.Services.Settings;
 
 namespace Versioner.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
     private readonly IAppReleaseClient _client;
+    private readonly Back4AppOptions _options;
     private readonly ILogger<MainViewModel> _logger;
     private readonly EditorState _empty = new("", "", "", false, true);
     private EditorState _snapshot;
@@ -22,18 +26,40 @@ public partial class MainViewModel : ViewModelBase
     private bool _confirming;
     private bool _dialogOpen;
 
-    public MainViewModel(IAppReleaseClient client, ILogger<MainViewModel> logger)
+    public MainViewModel(
+        IAppReleaseClient client,
+        IOptions<Back4AppOptions> options,
+        ILogger<MainViewModel> logger)
     {
         _client = client;
+        _options = options.Value;
         _logger = logger;
-        IsConfigured = client.IsConfigured;
+        IsConfigured = _options.IsConfigured;
         _snapshot = _empty;
         StatusText = IsConfigured
             ? "就绪"
-            : "未配置 Back4App 密钥。请在 appsettings.local.json 中填写 ApplicationId 和 MasterKey。";
+            : "未配置 Back4App 密钥，点击右上角「密钥」填写。";
     }
 
-    public bool IsConfigured { get; }
+    public Back4AppOptions CredentialDraft() => new()
+    {
+        ApplicationId = _options.ApplicationId,
+        MasterKey = _options.MasterKey,
+        ServerUrl = _options.ServerUrl
+    };
+
+    public void SaveCredentials(Back4AppOptions incoming)
+    {
+        UserSettingsStore.Save(_options, incoming);
+        IsConfigured = _options.IsConfigured;
+        StatusText = "密钥已保存";
+    }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
+    private bool _isConfigured;
 
     public ObservableCollection<AppReleaseListItem> Releases { get; } = [];
 
@@ -103,7 +129,7 @@ public partial class MainViewModel : ViewModelBase
     {
         if (!IsConfigured)
         {
-            StatusText = "未配置 Back4App 密钥。";
+            StatusText = "未配置 Back4App 密钥，点击右上角「密钥」填写。";
             return;
         }
 

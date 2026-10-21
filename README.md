@@ -12,9 +12,7 @@
 单文件、非自包含（依赖目标机已安装 .NET 10 Desktop Runtime）、x64，输出到仓库根目录 `publish/`：
 
 ```bash
-dotnet publish Versioner/Versioner.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
+dotnet publish Versioner/Versioner.csproj -c Release -r win-x64 --self-contained false -o publish
 ```
 
-- `IncludeNativeLibrariesForSelfExtract=true`：把 SkiaSharp 的原生库 `libSkiaSharp.dll` 一并打进 exe，否则它会单独留在输出目录
-- `appsettings.json` 不会打进 exe，需与 `Versioner.exe` 放在同一目录
-- 本地存在 `appsettings.local.json` 时也会被复制到 `publish/`，分发前注意移除
+发布结果只有 `Versioner.exe`。加载动画打进程序集；Back4App 的 Application Id 和 Master Key 写在 `%LocalAppData%\Versioner\settings.json`。没有 Master Key 时，启动会弹出配置窗口。

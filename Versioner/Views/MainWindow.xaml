@@ -362,12 +362,19 @@
             </Grid.RowDefinitions>
 
             <DockPanel Margin="0,0,0,16">
+                <Button DockPanel.Dock="Right"
+                        Content="密钥"
+                        Click="Credentials_OnClick"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        ToolTip="配置 Application Id 和 Master Key"
+                        VerticalAlignment="Center" />
                 <TextBlock Text="版本记录"
                            FontSize="22"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center" />
                 <TextBlock HorizontalAlignment="Right"
                            VerticalAlignment="Center"
+                           Margin="0,0,4,0"
                            Opacity="0.6"
                            Text="{Binding Releases.Count, StringFormat=共 {0} 条}" />
             </DockPanel>
@@ -462,6 +469,7 @@
                     <lottie:LottieAnimationView x:Name="LoadingLottie"
                                                 Width="200"
                                                 Height="200"
+                                                ResourcePath="pack://application:,,,/Assets/fish.json"
                                                 AutoPlay="True"
                                                 RepeatCount="-1"
                                                 HorizontalAlignment="Center"
